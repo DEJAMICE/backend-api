@@ -1,0 +1,6 @@
+@SafeSignal.Api_HostAddress = http://localhost:5214
+
+GET {{SafeSignal.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
