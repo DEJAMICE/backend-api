@@ -1,4 +1,4 @@
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using SafeSignal.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,11 +44,18 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Ingrese el token JWT obtenido en el inicio de sesión. Ejemplo: Bearer {token}"
     });
 
-    options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecuritySchemeReference("Bearer"),
-            new List<string>()
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
         }
     });
 });
@@ -88,7 +95,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "SafeSignal API v1");
-    // Al acceder a la raíz del servidor se abre directamente la documentación Swagger
     c.RoutePrefix = "swagger";
 });
 
