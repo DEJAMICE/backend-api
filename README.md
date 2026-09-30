@@ -9,7 +9,7 @@ API RESTful oficial para la plataforma de seguridad urbana inteligente **SafeSig
 
 ---
 
-## 🏗️ Arquitectura de la Solución
+## Arquitectura de la Solución
 
 El proyecto está estructurado siguiendo principios de **Arquitectura Limpia / Por Capas**, desacoplando el dominio, la lógica de negocio y los controladores expuestos:
 
@@ -43,7 +43,7 @@ DEJAMICE/backend-api/
 
 ---
 
-## 🛡️ Endpoints Desarrollados (Persona 3 - Mathias Cárdenas)
+## Endpoints Desarrollados (Persona 3 - Mathias Cárdenas)
 
 ### 1. Módulo de Alertas SOS (`/api/v1/alerts`)
 * `POST /api/v1/alerts`: Emite una alerta de emergencia SOS geolocalizada con notificación inmediata a contactos y serenazgo.
@@ -62,14 +62,14 @@ DEJAMICE/backend-api/
 
 ---
 
-## 🤝 Guía de Integración para el Equipo
+## Guía de Integración para el Equipo
 
 * **Persona 2 (Mateo Salazar):** Puede acoplar directamente su `AuthController` (`/api/v1/auth`) y `UsersController` (`/api/v1/users`) inyectando sus servicios en `Program.cs`. La estructura ya tiene configurado el esquema de autenticación JWT Bearer en Swagger UI.
 * **Personas 4 y 5 (Frontend Web):** Los endpoints coinciden 1:1 con las funciones expuestas en [`src/services/api.js`](https://github.com/DEJAMICE/Frontend-web) del repositorio `Frontend-web`.
 
 ---
 
-## 🚀 Ejecución y Pruebas Locales
+## Ejecución y Pruebas Locales
 
 ```bash
 # 1. Restaurar y compilar la solución
@@ -79,12 +79,12 @@ dotnet build
 dotnet run --launch-profile http
 
 # 3. Abrir la documentación interactiva Swagger UI en el navegador:
-# 👉 http://localhost:5000/swagger
+# http://localhost:5000/swagger
 ```
 
 ---
 
-## 🌿 Metodología GitFlow
+## Metodología GitFlow
 
 * `main`: Producción y versiones estables.
 * `develop`: Integración de módulos de backend.
