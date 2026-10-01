@@ -20,6 +20,10 @@
     {
       "key": "deviceId",
       "value": ""
+    },
+    {
+      "key": "tokenRegistro",
+      "value": ""
     }
   ],
   "item": [
@@ -111,7 +115,7 @@
                 }
               }
             },
-            "description": "Email con timestamp para poder repetir la prueba. Guarda el token del nuevo usuario."
+            "description": "Email con timestamp para poder repetir la prueba. El token del nuevo usuario se guarda en {{tokenRegistro}} y NO reemplaza al token del usuario demo."
           },
           "event": [
             {
@@ -121,7 +125,7 @@
                 "exec": [
                   "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
                   "const j = pm.response.json();",
-                  "pm.collectionVariables.set(\"token\", j.accessToken);"
+                  "pm.collectionVariables.set(\"tokenRegistro\", j.accessToken);"
                 ]
               }
             }
