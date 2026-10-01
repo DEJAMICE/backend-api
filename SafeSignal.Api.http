@@ -1,6 +1,58 @@
-@SafeSignal.Api_HostAddress = http://localhost:5214
+@host = http://localhost:5000
+@email = demo@safesignal.pe
+@password = Demo1234!
 
-GET {{SafeSignal.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. Login (usuario demo) -> copiar accessToken en la variable @token
+# @name login
+POST {{host}}/api/v1/auth/login
+Content-Type: application/json
+
+{ "email": "{{email}}", "password": "{{password}}" }
 
 ###
+@token = {{login.response.body.accessToken}}
+
+### 2. Registro de usuario nuevo
+POST {{host}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Mateo Salazar",
+  "email": "mateo@example.com",
+  "phoneNumber": "+51987654321",
+  "password": "Secreta123",
+  "profileType": "Student"
+}
+
+### 3. Mi perfil
+GET {{host}}/api/v1/users/me
+Authorization: Bearer {{token}}
+
+### 4. Actualizar perfil
+PUT {{host}}/api/v1/users/me
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "fullName": "Usuario Demo Actualizado", "phoneNumber": "+51999111222", "profileType": "NightWorker" }
+
+### 5. Contactos de confianza
+GET {{host}}/api/v1/contacts
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/v1/contacts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "fullName": "Ana Pérez", "relationship": "Hermana", "phoneNumber": "+51911111111", "email": "ana@example.com", "accessLevel": "Primary" }
+
+### 6. Dispositivos IoT
+GET {{host}}/api/v1/devices
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/v1/devices
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "name": "Mi reloj SafeSignal", "deviceCode": "SS-SW-0002", "deviceType": "SmartWatch", "macAddress": "AA:BB:CC:DD:EE:02" }
