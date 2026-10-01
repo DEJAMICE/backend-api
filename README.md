@@ -58,20 +58,20 @@ DEJAMICE/backend-api/
 
 ## Endpoints Desarrollados (Persona 2 - Mateo Salazar)
 
-Los endpoints marcados con 🔒 requieren el header `Authorization: Bearer {token}`. Cada usuario solo accede a sus propios datos.
+Los endpoints marcados con X requieren el header `Authorization: Bearer {token}`. Cada usuario solo accede a sus propios datos.
 
 ### 0. Autenticación (`/api/v1/auth`)
 * `POST /api/v1/auth/register`: Registra un usuario y devuelve su token JWT.
 * `POST /api/v1/auth/login`: Inicia sesión y devuelve el token JWT.
 
-### 0.1 Usuarios y Perfiles (`/api/v1/users`) 🔒
+### 0.1 Usuarios y Perfiles (`/api/v1/users`) X
 * `GET /api/v1/users/me`: Perfil del usuario autenticado.
 * `PUT /api/v1/users/me`: Actualiza nombre, teléfono y perfil de uso (Standard / Student / NightWorker).
 * `PUT /api/v1/users/me/password`: Cambia la contraseña.
 * `PUT /api/v1/users/me/subscription`: Cambia el plan (Free / Premium).
 * `DELETE /api/v1/users/me`: Elimina la cuenta con sus contactos y dispositivos.
 
-### 0.2 Contactos de Confianza (`/api/v1/contacts`) 🔒
+### 0.2 Contactos de Confianza (`/api/v1/contacts`) X
 * `POST /api/v1/contacts`: Agrega un contacto.
 * `GET /api/v1/contacts?accessLevel=Primary`: Lista contactos (filtro opcional por prioridad).
 * `GET /api/v1/contacts/{id}`: Detalle de un contacto.
@@ -79,7 +79,7 @@ Los endpoints marcados con 🔒 requieren el header `Authorization: Bearer {toke
 * `PATCH /api/v1/contacts/{id}/access-level`: Cambia la prioridad (Primary / Secondary / EmergencyOnly).
 * `DELETE /api/v1/contacts/{id}`: Elimina un contacto.
 
-### 0.3 Dispositivos IoT (`/api/v1/devices`) 🔒
+### 0.3 Dispositivos IoT (`/api/v1/devices`) X
 * `POST /api/v1/devices`: Vincula un dispositivo (código y MAC únicos).
 * `GET /api/v1/devices`: Lista los dispositivos del usuario.
 * `GET /api/v1/devices/{id}`: Detalle (batería, conexión, última vez visto).
@@ -87,8 +87,8 @@ Los endpoints marcados con 🔒 requieren el header `Authorization: Bearer {toke
 * `PATCH /api/v1/devices/{id}/status`: Reporta batería y conectividad.
 * `DELETE /api/v1/devices/{id}`: Desvincula el dispositivo.
 
-> **Usuario demo (datos semilla):** `demo@safesignal.pe` / `Demo1234!`. El almacenamiento es en memoria: los datos se reinician al detener la API.
-> La clave JWT está en `appsettings.json` (sección `Jwt`); en producción debe sobrescribirse con la variable de entorno `Jwt__Key`.
+> **Usuario demo:** `demo@safesignal.pe` / `Demo1234!`. El almacenamiento es en memoria: los datos se reinician al detener la API.
+> La clave JWT está en `appsettings.json` (sección `Jwt`). En producción debe sobrescribirse con la variable de entorno `Jwt__Key`.
 
 ## Endpoints Desarrollados (Persona 3 - Mathias Cárdenas)
 
