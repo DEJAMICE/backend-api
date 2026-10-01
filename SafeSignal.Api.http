@@ -2,6 +2,10 @@
 @email = demo@safesignal.pe
 @password = Demo1234!
 
+# ==============================================================================
+# MÓDULOS DE PERSONA 2: MATEO SALAZAR (Auth, Users, Contacts, Devices)
+# ==============================================================================
+
 ### 1. Login (usuario demo) -> copiar accessToken en la variable @token
 # @name login
 POST {{host}}/api/v1/auth/login
@@ -56,3 +60,82 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 { "name": "Mi reloj SafeSignal", "deviceCode": "SS-SW-0002", "deviceType": "SmartWatch", "macAddress": "AA:BB:CC:DD:EE:02" }
+
+
+# ==============================================================================
+# MÓDULOS DE PERSONA 3: MATHIAS CÁRDENAS (Alertas SOS y Seguimiento de Rutas)
+# ==============================================================================
+
+### 7. Alertas SOS
+# 7.1 Alertas activas en tiempo real
+GET {{host}}/api/v1/alerts/active
+
+### 7.2 Emitir Alerta SOS de Emergencia
+# @name emitAlert
+POST {{host}}/api/v1/alerts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "latitude": -12.0864,
+  "longitude": -77.0321,
+  "locationAddress": "Av. Salaverry cdra. 24, San Isidro",
+  "type": "PanicButton",
+  "severity": "Critical",
+  "deviceId": "SS-SW-0002",
+  "deviceName": "Pulsera SOS SafeSignal BLE",
+  "batteryLevel": 90,
+  "notes": "Alerta de pánico activada en trayecto universitario"
+}
+
+### 7.3 Historial de Alertas
+GET {{host}}/api/v1/alerts/history
+Authorization: Bearer {{token}}
+
+### 7.4 Resolver Alerta SOS
+PUT {{host}}/api/v1/alerts/11111111-1111-1111-1111-111111111111/resolve
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "resolutionNotes": "Auxilio brindado por Serenazgo. Usuario seguro."
+}
+
+### 8. Seguimiento de Rutas y Telemetría
+# 8.1 Iniciar sesión de monitoreo de ruta
+# @name startRoute
+POST {{host}}/api/v1/tracking/start
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "originAddress": "Campus UPC San Isidro",
+  "destinationAddress": "Paradero Av. Salaverry",
+  "estimatedDurationMinutes": 25,
+  "shareWithContacts": true
+}
+
+### 8.2 Registrar punto de telemetría en vivo
+POST {{host}}/api/v1/tracking/points
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "routeId": "44444444-4444-4444-4444-444444444444",
+  "latitude": -12.0875,
+  "longitude": -77.0335,
+  "speed": 4.8,
+  "heading": 50.0
+}
+
+### 8.3 Consultar ruta en tiempo real
+GET {{host}}/api/v1/tracking/44444444-4444-4444-4444-444444444444/live
+Authorization: Bearer {{token}}
+
+### 8.4 Finalizar seguimiento de ruta
+POST {{host}}/api/v1/tracking/44444444-4444-4444-4444-444444444444/stop
+Authorization: Bearer {{token}}
+
+### 8.5 Historial de recorridos
+GET {{host}}/api/v1/tracking/history
+Authorization: Bearer {{token}}
