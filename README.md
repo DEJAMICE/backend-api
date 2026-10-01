@@ -16,14 +16,25 @@ El proyecto está estructurado siguiendo principios de **Arquitectura Limpia / P
 ```text
 DEJAMICE/backend-api/
 ├── Controllers/
+│   ├── AuthController.cs        # Endpoints /api/v1/auth (Persona 2)
+│   ├── UsersController.cs       # Endpoints /api/v1/users (Persona 2)
+│   ├── ContactsController.cs    # Endpoints /api/v1/contacts (Persona 2)
+│   ├── DevicesController.cs     # Endpoints /api/v1/devices (Persona 2)
 │   ├── AlertsController.cs      # Endpoints /api/v1/alerts (Persona 3)
 │   └── TrackingController.cs    # Endpoints /api/v1/tracking (Persona 3)
 ├── Domain/
 │   ├── Entities/
+│   │   ├── User.cs              # Usuario y perfil (Persona 2)
+│   │   ├── TrustContact.cs      # Contacto de confianza (Persona 2)
+│   │   ├── IoTDevice.cs         # Dispositivo IoT vinculado (Persona 2)
 │   │   ├── Alert.cs             # Entidad Core de Emergencia
 │   │   ├── TrackingRoute.cs     # Sesión de ruta asistida
 │   │   └── TrackingPoint.cs     # Waypoints geolocalizados
 │   └── Enums/
+│       ├── UserProfile.cs       # Standard, Student, NightWorker
+│       ├── SubscriptionPlan.cs  # Free, Premium
+│       ├── AccessLevel.cs       # Primary, Secondary, EmergencyOnly
+│       ├── DeviceType.cs        # PanicButton, SmartWatch, TrackerTag
 │       ├── AlertStatus.cs       # Active, Resolved, Cancelled, FalseAlarm
 │       ├── AlertType.cs         # PanicButton, SilentAlert, Medical, etc.
 │       ├── AlertSeverity.cs     # Low, Medium, High, Critical
@@ -32,6 +43,8 @@ DEJAMICE/backend-api/
 │   ├── Alerts/                  # Request/Response para alertas SOS
 │   └── Tracking/                # Request/Response para telemetría
 ├── Services/
+│   ├── Security/                # JwtSettings, JwtTokenService, PasswordHasher (PBKDF2)
+│   ├── AuthService.cs / UserService.cs / ContactService.cs / DeviceService.cs  # Persona 2
 │   ├── IAlertService.cs         # Contrato de lógica de emergencias
 │   ├── AlertService.cs          # Despacho, validación y seed data
 │   ├── ITrackingService.cs      # Contrato de telemetría de rutas
@@ -42,6 +55,40 @@ DEJAMICE/backend-api/
 ```
 
 ---
+
+## Endpoints Desarrollados (Persona 2 - Mateo Salazar)
+
+Los endpoints marcados con 🔒 requieren el header `Authorization: Bearer {token}`. Cada usuario solo accede a sus propios datos.
+
+### 0. Autenticación (`/api/v1/auth`)
+* `POST /api/v1/auth/register`: Registra un usuario y devuelve su token JWT.
+* `POST /api/v1/auth/login`: Inicia sesión y devuelve el token JWT.
+
+### 0.1 Usuarios y Perfiles (`/api/v1/users`) 🔒
+* `GET /api/v1/users/me`: Perfil del usuario autenticado.
+* `PUT /api/v1/users/me`: Actualiza nombre, teléfono y perfil de uso (Standard / Student / NightWorker).
+* `PUT /api/v1/users/me/password`: Cambia la contraseña.
+* `PUT /api/v1/users/me/subscription`: Cambia el plan (Free / Premium).
+* `DELETE /api/v1/users/me`: Elimina la cuenta con sus contactos y dispositivos.
+
+### 0.2 Contactos de Confianza (`/api/v1/contacts`) 🔒
+* `POST /api/v1/contacts`: Agrega un contacto.
+* `GET /api/v1/contacts?accessLevel=Primary`: Lista contactos (filtro opcional por prioridad).
+* `GET /api/v1/contacts/{id}`: Detalle de un contacto.
+* `PUT /api/v1/contacts/{id}`: Actualiza un contacto.
+* `PATCH /api/v1/contacts/{id}/access-level`: Cambia la prioridad (Primary / Secondary / EmergencyOnly).
+* `DELETE /api/v1/contacts/{id}`: Elimina un contacto.
+
+### 0.3 Dispositivos IoT (`/api/v1/devices`) 🔒
+* `POST /api/v1/devices`: Vincula un dispositivo (código y MAC únicos).
+* `GET /api/v1/devices`: Lista los dispositivos del usuario.
+* `GET /api/v1/devices/{id}`: Detalle (batería, conexión, última vez visto).
+* `PUT /api/v1/devices/{id}`: Edita nombre y tipo.
+* `PATCH /api/v1/devices/{id}/status`: Reporta batería y conectividad.
+* `DELETE /api/v1/devices/{id}`: Desvincula el dispositivo.
+
+> **Usuario demo (datos semilla):** `demo@safesignal.pe` / `Demo1234!`. El almacenamiento es en memoria: los datos se reinician al detener la API.
+> La clave JWT está en `appsettings.json` (sección `Jwt`); en producción debe sobrescribirse con la variable de entorno `Jwt__Key`.
 
 ## Endpoints Desarrollados (Persona 3 - Mathias Cárdenas)
 
@@ -64,7 +111,7 @@ DEJAMICE/backend-api/
 
 ## Guía de Integración para el Equipo
 
-* **Persona 2 (Mateo Salazar):** Puede acoplar directamente su `AuthController` (`/api/v1/auth`) y `UsersController` (`/api/v1/users`) inyectando sus servicios en `Program.cs`. La estructura ya tiene configurado el esquema de autenticación JWT Bearer en Swagger UI.
+* **Persona 2 (Mateo Salazar):** Módulo base implementado: `/api/v1/auth`, `/api/v1/users`, `/api/v1/contacts` y `/api/v1/devices`, con autenticación JWT Bearer y documentación Swagger. Colección Postman en `docs/SafeSignal.postman_collection.json`.
 * **Personas 4 y 5 (Frontend Web):** Los endpoints coinciden 1:1 con las funciones expuestas en [`src/services/api.js`](https://github.com/DEJAMICE/Frontend-web) del repositorio `Frontend-web`.
 
 ---
@@ -89,3 +136,4 @@ dotnet run --launch-profile http
 * `main`: Producción y versiones estables.
 * `develop`: Integración de módulos de backend.
 * `feature/Cardenas`: Desarrollo de la lógica core de Alertas SOS y Seguimiento de Rutas.
+* `feature/Salazar`: Módulo base: autenticación JWT, usuarios, contactos de confianza y dispositivos IoT.
