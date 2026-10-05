@@ -33,7 +33,9 @@ builder.Services.AddSwaggerGen(options =>
                       "* `/api/v1/auth`: Registro e inicio de sesión con token JWT (Persona 2 - Mateo Salazar).\n" +
                       "* `/api/v1/users`: Gestión del perfil del usuario autenticado (Persona 2 - Mateo Salazar).\n" +
                       "* `/api/v1/contacts`: CRUD de contactos de confianza / red de apoyo (Persona 2 - Mateo Salazar).\n" +
-                      "* `/api/v1/devices`: CRUD de dispositivos IoT vinculados (Persona 2 - Mateo Salazar).\n\n" +
+                      "* `/api/v1/devices`: CRUD de dispositivos IoT vinculados (Persona 2 - Mateo Salazar).\n" +
+                      "* `/api/v1/notifications`: Historial de notificaciones y conteo de alertas pendientes.\n" +
+                      "* `/api/v1/reports`: Publicación comunitaria de reportes de incidentes e iluminación.\n\n" +
                       "**Cómo probar con JWT:** ejecute `POST /api/v1/auth/login` (usuario demo: `demo@safesignal.pe` / `Demo1234!`), copie el `accessToken`, pulse **Authorize** e ingrese únicamente el token.",
         Contact = new OpenApiContact
         {
@@ -90,6 +92,8 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddSingleton<IContactService, ContactService>();
 builder.Services.AddSingleton<IDeviceService, DeviceService>();
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+builder.Services.AddSingleton<IReportService, ReportService>();
 
 // 3.2 Autenticación JWT Bearer
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();
