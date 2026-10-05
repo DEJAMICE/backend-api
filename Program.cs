@@ -155,7 +155,10 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -164,5 +167,11 @@ app.MapControllers();
 
 // Redirección amigable de raíz hacia /swagger
 app.MapGet("/", () => Results.Redirect("/swagger"));
+
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    app.Urls.Add($"http://0.0.0.0:{port}");
+}
 
 app.Run();
