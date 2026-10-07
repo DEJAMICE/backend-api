@@ -2,7 +2,7 @@
 
 [![Organization](https://img.shields.io/badge/Organization-DEJAMICE-blue)](https://github.com/DEJAMICE)
 [![Framework](https://img.shields.io/badge/Framework-.NET%209.0%20ASP.NET%20Core-purple)](https://dotnet.microsoft.com/)
-[![OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI%20v1-green)](http://localhost:5000/swagger)
+[![OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI%20v1-green)](https://backend-api-21zu.onrender.com/)
 [![Course](https://img.shields.io/badge/UPC-Dise%C3%B1o%20de%20Experimentos%20de%20Software-red)](#)
 
 API RESTful oficial para la plataforma de seguridad urbana inteligente **SafeSignal**, desarrollada para el curso *Diseño de Experimentos de Software* (Universidad Peruana de Ciencias Aplicadas - UPC).
