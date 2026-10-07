@@ -9,5 +9,6 @@ public enum AlertType
     SilentAlert = 1,
     MedicalEmergency = 2,
     Harassment = 3,
-    RouteDeviation = 4
+    RouteDeviation = 4,
+    WEB_PANIC_BUTTON = PanicButton
 }
