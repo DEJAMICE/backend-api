@@ -35,9 +35,14 @@ public class AlertsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        // Obtener usuario (autenticado o por defecto)
-        var userId = User.Identity?.Name ?? "usr_001";
-        var userName = "Mathias Cárdenas";
+        // Obtener usuario (autenticado por JWT o valores predeterminados)
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? User.FindFirst("sub")?.Value
+                     ?? User.Identity?.Name
+                     ?? "usr_001";
+        var userName = User.FindFirst("name")?.Value
+                       ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                       ?? "Usuario Demo SafeSignal";
 
         var createdAlert = await _alertService.EmitAlertAsync(request, userId, userName);
         return CreatedAtAction(nameof(GetAlertById), new { id = createdAlert.Id }, createdAlert);
