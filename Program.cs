@@ -16,6 +16,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+// 1.1 Configuración de Health Checks para Continuous Monitoring (DevOps)
+builder.Services.AddHealthChecks();
+
 // 2. Configuración de Swagger / OpenAPI con soporte para JWT y documentación detallada
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -168,6 +171,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Endpoint oficial de Continuous Monitoring: Health Check
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var result = new
+        {
+            status = report.Status.ToString(),
+            service = "SafeSignal API",
+            environment = app.Environment.EnvironmentName,
+            timestamp = DateTime.UtcNow,
+            version = "1.0.0"
+        };
+        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(result));
+    }
+});
 
 // Redirección amigable de raíz hacia /swagger
 app.MapGet("/", () => Results.Redirect("/swagger"));
