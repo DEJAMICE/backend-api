@@ -14,6 +14,9 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     public UserProfile ProfileType { get; set; } = UserProfile.Standard;
     public SubscriptionPlan SubscriptionPlan { get; set; } = SubscriptionPlan.Free;
+    public bool AnalyticsConsentGranted { get; set; }
+    public DateTime? AnalyticsConsentUpdatedAt { get; set; }
+    public int AutoAlertCountdownSeconds { get; set; } = 5;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 }

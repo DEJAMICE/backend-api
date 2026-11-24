@@ -95,6 +95,23 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
+    /// Actualiza las preferencias de privacidad/analítica (US26) y cuenta regresiva automática (US17).
+    /// </summary>
+    [HttpPatch("me/preferences")]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateExperimentPreferences([FromBody] UpdateExperimentPreferencesRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (User.GetUserId() is not Guid userId) return Unauthorized();
+
+        var updated = await _userService.UpdateExperimentPreferencesAsync(userId, request);
+        return updated == null ? NotFound(new { message = "Usuario no encontrado." }) : Ok(updated);
+    }
+
+    /// <summary>
     /// Elimina la cuenta del usuario autenticado junto con sus contactos de confianza y dispositivos vinculados.
     /// </summary>
     [HttpDelete("me")]

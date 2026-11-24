@@ -23,5 +23,6 @@ public interface IUserService
     Task<UserResponse?> UpdateProfileAsync(Guid id, UpdateUserRequest request);
     Task<ChangePasswordResult> ChangePasswordAsync(Guid id, ChangePasswordRequest request);
     Task<UserResponse?> UpdateSubscriptionAsync(Guid id, UpdateSubscriptionRequest request);
+    Task<UserResponse?> UpdateExperimentPreferencesAsync(Guid id, UpdateExperimentPreferencesRequest request);
     Task<bool> DeleteAsync(Guid id);
 }

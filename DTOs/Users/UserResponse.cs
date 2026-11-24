@@ -11,6 +11,9 @@ public class UserResponse
     public string PhoneNumber { get; set; } = string.Empty;
     public string ProfileType { get; set; } = string.Empty;
     public string SubscriptionPlan { get; set; } = string.Empty;
+    public bool AnalyticsConsentGranted { get; set; }
+    public DateTime? AnalyticsConsentUpdatedAt { get; set; }
+    public int AutoAlertCountdownSeconds { get; set; } = 5;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
