@@ -2,9 +2,11 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SafeSignal.Api.Services;
+using SafeSignal.Api.Services.Experiments;
 using SafeSignal.Api.Services.Security;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,11 @@ builder.Services.AddControllers()
 
 // 1.1 Configuración de Health Checks para Continuous Monitoring (DevOps)
 builder.Services.AddHealthChecks();
+
+// 1.2 Gestión de Feature Flags para Experiment-Driven Development (TS01)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddFeatureManagement()
+    .WithTargeting<SecuraNetTargetingContextAccessor>();
 
 // 2. Configuración de Swagger / OpenAPI con soporte para JWT y documentación detallada
 builder.Services.AddEndpointsApiExplorer();
@@ -97,6 +104,7 @@ builder.Services.AddSingleton<IContactService, ContactService>();
 builder.Services.AddSingleton<IDeviceService, DeviceService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
+builder.Services.AddSingleton<IExperimentService, ExperimentService>();
 
 // 3.2 Autenticación JWT Bearer
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();

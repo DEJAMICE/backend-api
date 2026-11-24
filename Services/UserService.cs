@@ -121,6 +121,28 @@ public class UserService : IUserService
         return Task.FromResult<UserResponse?>(MapToResponse(user));
     }
 
+    public Task<UserResponse?> UpdateExperimentPreferencesAsync(Guid id, UpdateExperimentPreferencesRequest request)
+    {
+        if (!_users.TryGetValue(id, out var user))
+        {
+            return Task.FromResult<UserResponse?>(null);
+        }
+
+        if (request.AnalyticsConsentGranted.HasValue)
+        {
+            user.AnalyticsConsentGranted = request.AnalyticsConsentGranted.Value;
+            user.AnalyticsConsentUpdatedAt = DateTime.UtcNow;
+        }
+
+        if (request.AutoAlertCountdownSeconds.HasValue)
+        {
+            user.AutoAlertCountdownSeconds = request.AutoAlertCountdownSeconds.Value;
+        }
+
+        user.UpdatedAt = DateTime.UtcNow;
+        return Task.FromResult<UserResponse?>(MapToResponse(user));
+    }
+
     public Task<bool> DeleteAsync(Guid id) => Task.FromResult(_users.TryRemove(id, out _));
 
     private static string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
@@ -133,6 +155,9 @@ public class UserService : IUserService
         PhoneNumber = u.PhoneNumber,
         ProfileType = u.ProfileType.ToString(),
         SubscriptionPlan = u.SubscriptionPlan.ToString(),
+        AnalyticsConsentGranted = u.AnalyticsConsentGranted,
+        AnalyticsConsentUpdatedAt = u.AnalyticsConsentUpdatedAt,
+        AutoAlertCountdownSeconds = u.AutoAlertCountdownSeconds,
         CreatedAt = u.CreatedAt,
         UpdatedAt = u.UpdatedAt
     };
